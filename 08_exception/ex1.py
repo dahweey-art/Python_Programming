@@ -39,14 +39,14 @@
 #    ( except ) 블록으로 이동한다.
 #  - 예외가 발생하지 않으면 except 블록은 실행되지 않는다.
 # ===========================================================
-#try:
+# try:
 #    num = int(input("숫자 => "))  # 예외 발생 가능한 코드
 #    print(10 / num)
-#except:
+# except:
 #    print("숫자를 입력하세요")
 
 
-#print("프로그램 계속 진행")
+# print("프로그램 계속 진행")
 
 
 # ===========================================================
@@ -65,18 +65,18 @@
 #  - 구체적으로 예외를 지정하는 것을 권장
 #  - 에러 메시지 확인하기: except 예외종류 as 변수명
 # ===========================================================
-#try:
+# try:
 # num = int(input("숫자 => "))        # 예외 발생 가능한 코드
 # result = 10 / num
-#except ValueError as e:
+# except ValueError as e:
 #    print("숫자를 입력하세요")
 #    print(e)
-#except ZeroDivisionError:
+# except ZeroDivisionError:
 #    print("0으로 나눌 수 없습니다")
 #    print(e)
-#else:
+# else:
 #   print("결과: ", result)
-#finally:
+# finally:
 #   print("끝")
 # ===========================================================
 #  4. 예외 직접 발생시키기
@@ -94,6 +94,8 @@ def check_age(age):
     except ValueError as e:
         print(e)
         raise
+
+
 try:
     check_age(-10)
 except ValueError as e:
@@ -110,11 +112,22 @@ except ValueError as e:
 
 
 def calc(a, op, b):
-    except ValueError as e:
-    print("숫자를 입력하세요")
-except ZeroDivisionError:
-    print("0으로 나눌 수 없습니다")
-
+    try:
+        a, b = int(a), int(b)
+    except ValueError:
+        raise ValueError("숫자를 입력하세요")
+    if op == "+":
+        return a + b
+    if op == "-":
+        return a - b
+    if op == "*":
+        return a * b
+    if op == "/":
+        if b == 0:
+            raise ZeroDivisionError("0으로 나눌 수 없습니다")
+        return a / b
+    else:
+        raise ValueError(f"지원하지 않는 연산자({op})입니다")
 
 
 # 2️⃣ 계산기 함수 호출 시 예외 처리하기
@@ -127,7 +140,15 @@ except ZeroDivisionError:
 for data in [("10", "+", "5"), ("10", "/", "0"), ("10", "%", "3"), ("ten", "+", "3")]:
     try:
         print(calc(*data))
-    except ValueError as e:
+    except (ValueError, ZeroDivisionError) as e:
         print("에러: ", e)
-    except ZeroDivisionError as e:
-        print("에러: ", e)
+try:
+    for data in [
+        ("10", "+", "5"),
+        ("10", "/", "0"),
+        ("10", "%", "3"),
+        ("ten", "+", "3"),
+    ]:
+        print(calc(*data))
+except (ValueError, ZeroDivisionError) as e:
+    print("에러: ", e)
